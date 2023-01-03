@@ -7,11 +7,11 @@ fn main() {
         .read_line(&mut input)
         .expect("Failed to read line");
 
-    let value: Vec<f64> = input
+    let value: Vec<i32> = input
         .as_mut_str()
         .split_ascii_whitespace()
         .map(|x: &str| x.parse().unwrap())
         .collect();
 
-    println!("{:?}", value[0] / value[1]);
+    println!("{:?}", value[0] - value[1]);
 }

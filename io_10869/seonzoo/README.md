@@ -1,4 +1,5 @@
-# IO 10869번: 사칙연산
+# IO 10869
+성공
 
 [10869번: 사칙연산](https://www.acmicpc.net/problem/10869)
 
