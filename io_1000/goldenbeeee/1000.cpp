@@ -1,3 +1,4 @@
+#include <iostream>
 using namespace std;
 
 int main(){
@@ -5,7 +6,7 @@ int main(){
 
     cin >> a;
     cin >> b;
-    count << a + b;
+    cout << a + b;
 
     return 0;
 }
