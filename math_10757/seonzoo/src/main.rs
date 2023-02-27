@@ -7,44 +7,51 @@ fn main() {
 
     stdin().read_line(&mut buf).unwrap();
 
-    let v = buf.split_whitespace().collect::<Vec<_>>();
-
-    let (a_str, b_str) = (v[0], v[1]);
-
-    let a_rev = a_str.chars().rev().collect::<Vec<_>>().capacity(10001);
-    let b_rev = b_str.chars().rev().collect::<Vec<_>>().capacity(10001);
+    let v = buf
+        .split_whitespace()
+        .map(|x| x.chars().rev().collect())
+        .collect::<Vec<Vec<_>>>();
 
     let mut res = Vec::new();
     let mut carry = 0;
 
-    for i in 0..10001 {
-        // let (a, b) = (
-        //     a_rev[i].to_digit(RADIX).unwrap(),
-        //     b_rev[i].to_digit(RADIX).unwrap(),
-        // );
-        let (a, b) = (a_rev[i], b_rev[i]);
+    let len = if v[0].len() < v[1].len() {
+        v[1].len()
+    } else {
+        v[0].len()
+    };
 
-        println!("{:?}, {:?}", a, b)
+    for i in 0..len {
+        let (a, b) = (
+            if v[0].len() <= i {
+                0
+            } else {
+                v[0][i].to_digit(RADIX).unwrap()
+            },
+            if v[1].len() <= i {
+                0
+            } else {
+                v[1][i].to_digit(RADIX).unwrap()
+            },
+        );
 
-        // let r = a + b + carry;
+        let r = a + b + carry;
 
-        // if r > 9 {
-        //     carry = 1;
-        //     res.push((r % 10).to_string())
-        // } else {
-        //     carry = 0;
-        //     res.push(r.to_string())
-        // }
+        if r > 9 {
+            carry = 1;
+            res.push((r % 10).to_string())
+        } else {
+            carry = 0;
+            res.push(r.to_string())
+        }
     }
 
-    // if carry > 0 {
-    //     res.push("1".to_string());
-    // }
+    if carry > 0 {
+        res.push("1".to_string());
+    }
 
-    // println!(
-    //     "{}",
-    //     res.iter()
-    //         .rev()
-    //         .fold(String::new(), |r, c| r + c.as_str() + "")
-    // )
+    println!(
+        "{}",
+        res.iter().rev().fold(String::new(), |r, c| r + c.as_str() + "")
+    )
 }
