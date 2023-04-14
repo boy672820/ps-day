@@ -6,10 +6,20 @@ fn main() {
     let mut v = input_vector();
 
     v.sort_by(|a, b| {
-        a.len().cmp(&b.len())
+        if a.len() == b.len() {
+            a.cmp(&b)
+        } else {
+            a.len().cmp(&b.len())
+        }
     });
 
-    for s in v.iter() {
+    for (i, s) in v.iter().enumerate() {
+        if i + 1 < v.len() {
+            if v[i + 1] == v[i] {
+                continue;
+            }
+        }
+
         writeln!(out, "{}", s).unwrap();
     }
 }
