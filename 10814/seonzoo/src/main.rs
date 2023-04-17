@@ -1,5 +1,10 @@
 use std::io::{stdin, stdout, BufWriter, Write};
 
+struct Student {
+    name: String,
+    age: u32,
+}
+
 fn main() {
     let mut out = BufWriter::new(stdout().lock());
     let mut input = String::new();
@@ -8,11 +13,9 @@ fn main() {
 
     let t = input.trim().parse::<u32>().unwrap();
 
-    let mut v: Vec<u32> = Vec::new();
-    let mut s: Vec<String> = Vec::new();
-    let mut keys: [usize; 201] = [0; 201];
+    let mut v: Vec<Student> = Vec::new();
 
-    for i in 0..t {
+    for _ in 0..t {
         input.clear();
         stdin().read_line(&mut input).unwrap();
 
@@ -22,15 +25,14 @@ fn main() {
             (v[0].trim().parse::<u32>().unwrap(), v[1].to_string())
         };
 
-        v.push(age);
-        s.push(name);
+        let student = Student { age, name };
 
-        keys[age as usize] = i as usize;
+        v.push(student);
     }
 
-    v.sort_by(|a, b| b.cmp(a));
+    v.sort_by(|a, b| a.age.cmp(&b.age));
 
-    for age in v.iter() {
-        writeln!(out, "{} {}", age, s[keys[*age as usize]]).unwrap();
+    for i in v.iter() {
+        writeln!(out, "{} {}", i.age, i.name).unwrap();
     }
 }
