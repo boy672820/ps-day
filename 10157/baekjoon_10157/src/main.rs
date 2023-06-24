@@ -13,7 +13,7 @@ fn main() {
         (v[0], v[1])
     };
 
-    let mut a = [[0; 10]; 10];
+    let mut a: [[i32; 1002]; 1002] = [[0; 1002]; 1002];
 
     for i in 0..(c + 1) {
         a[0][i] = -1;
@@ -27,15 +27,35 @@ fn main() {
 
     buf.clear();
     io::stdin().read_line(&mut buf).unwrap();
-    let mut k = buf.trim().parse::<u32>().unwrap();
+    let mut k = buf.trim().parse::<i32>().unwrap();
 
-    let dx = [-1, 0, 1, 0];
-    let dy = [0, 1, 0, -1];
-    let (mut x, mut y, mut dir, mut value) = (0, 0, 0, 1);
+    let dx: [i32; 4] = [-1, 0, 1, 0];
+    let dy: [i32; 4] = [0, 1, 0, -1];
+    let (mut x, mut y, mut dir, mut value): (i32, i32, i32, i32) = (0, 0, 0, 1);
 
     loop {
-        a[x][y] = value;
+        if value == k {
+            println!("{} {}", y, r)
+        }
 
-        if a[x + dx[dir]][y + dy[dir]] != 0 {}
+        if x >= 0 && y >= 0 {
+            a[x as usize][y as usize] = value;
+        }
+
+        let column = x + dx[dir as usize];
+        let row = y + dy[dir as usize];
+
+        if column >= 0 && row >= 0 && a[column as usize][row as usize] != 0 {
+            dir = (dir + 1) % 4;
+        }
+
+        x += dx[dir as usize];
+        y += dy[dir as usize];
+
+        value += 1;
+
+        if value > (c * r) as i32 {
+            break;
+        }
     }
 }
