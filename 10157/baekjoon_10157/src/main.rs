@@ -27,19 +27,20 @@ fn main() {
 
     buf.clear();
     io::stdin().read_line(&mut buf).unwrap();
-    let mut k = buf.trim().parse::<i32>().unwrap();
+    let k = buf.trim().parse::<i32>().unwrap();
 
     let dx: [i32; 4] = [-1, 0, 1, 0];
     let dy: [i32; 4] = [0, 1, 0, -1];
-    let (mut x, mut y, mut dir, mut value): (i32, i32, i32, i32) = (0, 0, 0, 1);
+    let (mut x, mut y, mut dir, mut value): (i32, i32, i32, i32) = (r as i32, 1, 0, 1);
 
     loop {
-        if value == k {
-            println!("{} {}", y, r)
-        }
-
         if x >= 0 && y >= 0 {
             a[x as usize][y as usize] = value;
+        }
+
+        if value == k {
+            println!("{} {}", y, r as i32 - x + 1);
+            break;
         }
 
         let column = x + dx[dir as usize];
@@ -51,10 +52,10 @@ fn main() {
 
         x += dx[dir as usize];
         y += dy[dir as usize];
-
         value += 1;
 
         if value > (c * r) as i32 {
+            println!("{}", 0);
             break;
         }
     }
