@@ -1,34 +1,20 @@
 use std::io;
 
 fn main() {
-    let (w, h, p, q, t) = input();
-    let (mut x, mut y) = (p, q);
+    let (w, h, mut p, mut q, t) = input();
 
-    let (mut x_, mut y_) = (1, 1);
-
-    for _ in 0..t {
-        if x == w {
-            x_ = -1;
-            y_ = 1;
-        }
-        if y == h {
-            x_ = -1;
-            y_ = -1;
-        }
-        if x == 0 {
-            x_ = 1;
-            y_ = 1;
-        }
-        if y == 0 {
-            x_ = -1;
-            y_ = 1;
-        }
-
-        x += x_;
-        y += y_;
+    p += t;
+    q += t;
+    p %= 2 * w;
+    q %= 2 * h;
+    if p > w {
+        p = 2 * w - p;
+    }
+    if q > h {
+        q = 2 * h - q;
     }
 
-    println!("{} {}", x, y)
+    println!("{} {}", p, q)
 }
 
 fn input() -> (i32, i32, i32, i32, i32) {
