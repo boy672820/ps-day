@@ -1,3 +1,4 @@
+use std::cmp;
 use std::collections::VecDeque;
 use std::io;
 
@@ -32,14 +33,19 @@ fn main() {
     }
 
     let mut visited: [[bool; MAP_SIZE]; MAP_SIZE] = [[false; MAP_SIZE]; MAP_SIZE];
+    let mut max = 0;
 
     for i in 0..h {
         for j in 0..w {
             if m[i][j] == 1 {
-                bfs(i, j, visited);
+                visited = [[false; MAP_SIZE]; MAP_SIZE];
+                let len = bfs(i, j, w as i32, h as i32, visited, m);
+                max = cmp::max(max, len);
             }
         }
     }
+
+    println!("{}", max)
 }
 
 struct Node {
@@ -48,7 +54,14 @@ struct Node {
     cost: usize,
 }
 
-fn bfs(x: usize, y: usize, mut visited: [[bool; MAP_SIZE]; MAP_SIZE]) {
+fn bfs(
+    x: usize,
+    y: usize,
+    w: i32,
+    h: i32,
+    mut visited: [[bool; MAP_SIZE]; MAP_SIZE],
+    m: [[i32; MAP_SIZE]; MAP_SIZE],
+) -> usize {
     let mut deq: VecDeque<Node> = VecDeque::new();
     deq.push_front(Node { x, y, cost: 0 });
     visited[y][x] = true;
@@ -56,12 +69,24 @@ fn bfs(x: usize, y: usize, mut visited: [[bool; MAP_SIZE]; MAP_SIZE]) {
     let mut len = 0;
 
     while !deq.is_empty() {
-        let cur = deq.pop_front();
+        let cur = deq.pop_front().unwrap();
 
         for i in 0..4 {
             let (nx, ny) = (cur.x as i32 + DX[i], cur.y as i32 + DY[i]);
 
-            // if nx >= 0 && ny >= 0 && nx < h && ny < w
+            if nx >= 0 && ny >= 0 && nx < h && ny < w {
+                if !visited[ny as usize][nx as usize] && m[ny as usize][nx as usize] == 1 {
+                    let added_cost = cur.cost + 1;
+                    deq.push_back(Node {
+                        y: ny as usize,
+                        x: nx as usize,
+                        cost: added_cost,
+                    });
+                    len = cmp::max(len, added_cost);
+                }
+            }
         }
     }
+
+    len
 }
