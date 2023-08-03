@@ -64,7 +64,7 @@ fn bfs(
 ) -> usize {
     let mut deq: VecDeque<Node> = VecDeque::new();
     deq.push_front(Node { x, y, cost: 0 });
-    visited[y][x] = true;
+    visited[x][y] = true;
 
     let mut len = 0;
 
@@ -75,14 +75,14 @@ fn bfs(
             let (nx, ny) = (cur.x as i32 + DX[i], cur.y as i32 + DY[i]);
 
             if nx >= 0 && ny >= 0 && nx < h && ny < w {
-                if !visited[ny as usize][nx as usize] && m[ny as usize][nx as usize] == 1 {
-                    let added_cost = cur.cost + 1;
+                if !visited[nx as usize][ny as usize] && m[nx as usize][ny as usize] == 1 {
+                    len = cmp::max(len, cur.cost + 1);
                     deq.push_back(Node {
-                        y: ny as usize,
                         x: nx as usize,
-                        cost: added_cost,
+                        y: ny as usize,
+                        cost: cur.cost + 1,
                     });
-                    len = cmp::max(len, added_cost);
+                    visited[nx as usize][ny as usize] = true;
                 }
             }
         }
