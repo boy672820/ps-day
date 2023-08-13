@@ -57,7 +57,7 @@ fn main() {
         } else {
             cap_2by2 -= a[1];
             a[1] = 0;
-            let cap_1by1 = 9 + cap_2by2 * 4;
+            let cap_1by1 = 7 + cap_2by2 * 4;
             a[0] -= cap_1by1;
 
             if a[0] < 0 {
