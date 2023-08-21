@@ -18,14 +18,17 @@ fn main() {
         deq.push_back(i);
     }
 
+    let mut r = String::new();
+
     while deq.len() != 0 {
-        for i in 0..deq.len() {
-            if deq[i] == k {
-                println!("{}", deq[i]);
-                deq.remove(i);
-            } else {
-                deq.swap_remove_back(i);
-            }
+        for _ in 0..k-1 {
+            deq.push_back(deq[0]);
+            deq.remove(0);
         }
+        r.push_str(&deq[0].to_string());
+        r.push_str(", ");
+        deq.remove(0);
     }
+
+    println!("<{}>", &r[..r.len() - 2]);
 }
