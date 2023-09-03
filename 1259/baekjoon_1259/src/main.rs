@@ -2,26 +2,38 @@ use std::io;
 
 fn main() {
     let mut buf = String::new();
-    let mut n = 1;
 
-    while n != 0 {
+    let mut r = String::new();
+
+    loop {
         io::stdin().read_line(&mut buf).unwrap();
-        n = buf.trim().parse::<u32>().unwrap();
+        let n = buf.trim().parse::<i32>().unwrap();
 
-        palindrome(n);
+        if n == 0 {
+            break;
+        }
+
+        if &buf.as_str()[0..1] == "0" {
+            r.push_str("no\n");
+            buf.clear();
+            continue;
+        }
+
+        let chars = n.to_string().chars().collect::<Vec<_>>();
+        let len = chars.len();
+        let mut result = true;
+        for i in 0..(len / 2) {
+            if chars[i] == chars[len - i - 1] {
+                result = true;
+            } else {
+                result = false;
+                break;
+            }
+        }
+        r.push_str(if result { "yes\n" } else { "no\n" });
 
         buf.clear();
     }
-}
 
-fn palindrome(mut n: u32) {
-    let mut i = 0;
-    let mut a: [u32; 6] = [0; 6];
-    while n != 0 {
-        a[i] = n;
-        n /= 10;
-        i += 1;
-    }
-
-    println!("{:?}", a)
+    println!("{}", &r[..r.len()-1]);
 }
