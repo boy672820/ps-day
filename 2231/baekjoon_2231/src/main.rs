@@ -6,9 +6,20 @@ fn main() {
 
     let n = buf.trim().parse::<usize>().unwrap();
 
-    // 216 = 198 + 1 + 9 + 8
-
-    let mut m = n;
-
-    println!("{}", m)
+    for i in 1..n+1 {
+        let mut m = i;
+        let mut sum = 0;
+        while m > 0 {
+            let re = m % 10;
+            sum += re;
+            m /= 10;
+        }
+        if n == sum + i {
+            println!("{}", i);
+            break;
+        }
+        if i == n {
+            println!("0")
+        }
+    }
 }
