@@ -21,5 +21,7 @@ fi
 gitignore_file="$project_dir/.gitignore"
 echo "/target" > "$gitignore_file"
 
+rm -rf "$project_dir/.git"
+
 echo "Process.."
 echo "Completed!"
