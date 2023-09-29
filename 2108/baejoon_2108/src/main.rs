@@ -19,7 +19,7 @@ fn main() {
 
         v.push(n);
         a[(4000 + n) as usize] += 1;
-        sum += n as f32;
+        sum += n as f64;
         count += 1.0;
         max = if max < n { n } else { max };
         min = if min > n { n } else { min };
@@ -27,7 +27,7 @@ fn main() {
 
     v.sort();
 
-    let avg: i32 = f32::round(sum / count) as i32;
+    let avg: i32 = f64::round(sum / count) as i32;
     let middle = v[v.len() / 2];
     let range = (min - max) * -1;
 
