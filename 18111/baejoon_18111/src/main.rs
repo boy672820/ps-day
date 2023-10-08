@@ -8,27 +8,29 @@ fn main() {
     let (n, m, b) = {
         let v = buf
             .split_whitespace()
-            .map(|x| x.trim().parse::<u32>().unwrap())
-            .collect::<Vec<u32>>();
+            .map(|x| x.trim().parse::<isize>().unwrap())
+            .collect::<Vec<isize>>();
         (v[0] as usize, v[1] as usize, v[2])
     };
 
-    let mut v: Vec<Vec<u32>> = Vec::new();
+    let mut v: Vec<Vec<isize>> = Vec::new();
     let mut max = 0;
+    let mut min = 256;
 
-    for i in 0..n {
+    for _ in 0..n {
         buf.clear();
         io::stdin().read_line(&mut buf).unwrap();
 
         let w = buf
             .split_whitespace()
-            .map(|x| x.trim().parse::<u32>().unwrap())
+            .map(|x| x.trim().parse::<isize>().unwrap())
             .collect::<Vec<_>>();
 
-        let mut v2: Vec<u32> = Vec::new();
+        let mut v2: Vec<isize> = Vec::new();
 
         for j in w.iter() {
             max = cmp::max(max, *j);
+            min = cmp::min(min, *j);
             v2.push(*j);
         }
 
@@ -37,41 +39,41 @@ fn main() {
 
     // -------------------------------------------------
 
-    let (mut dur, mut h) = (0, max);
-    let mut is_success = false;
+    let mut dur_time = 0x7f7f7f7f;
+    let mut most_height = 256;
 
-    while !is_success {
-        let mut inven = b;
-        let mut cur_h = h;
+    for h in min..256 {
+        let mut up_count = 0;
+        let mut down_count = 0;
+        let mut total_owned_block = b;
 
         for i in 0..n {
             for j in 0..m {
-                let mut cur = v[i][j];
+                let gap = h - v[i][j];
 
-                // 블록 놓기 작업 = 1초 소요
-                while cur < cur_h && inven != 0 {
-                    cur += 1;
-                    inven -= 1;
-                    dur += 1;
-                }
-                // 블록 빼기 작업 = 2초 소요
-                while cur > cur_h {
-                    cur -= 1;
-                    inven += 1;
-                    dur += 2;
-                }
-
-                if cur != cur_h {
-                    is_success = false;
-                    break;
+                if gap == 0 {
+                    continue;
+                } else if gap < 0 {
+                    down_count += gap * -1;
                 } else {
-                    is_success = true;
+                    up_count += gap;
                 }
             }
         }
 
-        h -= 1;
+        total_owned_block += down_count;
+
+        if up_count <= total_owned_block {
+            let t = down_count * 2 + up_count;
+
+            if dur_time >= t {
+                dur_time = t;
+                most_height = h;
+            }
+        } else if h > max {
+            break;
+        }
     }
 
-    println!("{} {}", dur, h)
+    println!("{} {}", dur_time, most_height)
 }
