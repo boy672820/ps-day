@@ -40,9 +40,9 @@ fn main() {
     // -------------------------------------------------
 
     let mut dur_time = 0x7f7f7f7f;
-    let mut most_height = 256;
+    let mut most_height = 0;
 
-    for h in min..256 {
+    for h in min..max + 1 {
         let mut up_count = 0;
         let mut down_count = 0;
         let mut total_owned_block = b;
@@ -54,9 +54,9 @@ fn main() {
                 if gap == 0 {
                     continue;
                 } else if gap < 0 {
-                    down_count += gap * -1;
+                    down_count += isize::abs(gap);
                 } else {
-                    up_count += gap;
+                    up_count += isize::abs(gap);
                 }
             }
         }
@@ -66,12 +66,12 @@ fn main() {
         if up_count <= total_owned_block {
             let t = down_count * 2 + up_count;
 
-            if dur_time >= t {
+            if dur_time > t {
                 dur_time = t;
                 most_height = h;
+            } else if dur_time == t && most_height < h {
+                most_height = h;
             }
-        } else if h > max {
-            break;
         }
     }
 
