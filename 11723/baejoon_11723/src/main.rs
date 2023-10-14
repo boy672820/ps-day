@@ -1,3 +1,4 @@
+use io::Write;
 use std::io;
 
 fn main() {
@@ -6,7 +7,8 @@ fn main() {
 
     let m = buf.trim().parse::<usize>().unwrap();
     let mut bit = 0; // 공집합으로 초기화
-    let mut r = String::new();
+
+    let mut out = io::BufWriter::new(io::stdout().lock());
 
     for _ in 0..m {
         buf.clear();
@@ -39,10 +41,10 @@ fn main() {
             // XOR 연산으로 toggle 기능을 쉽게 구현할 수 있음
             "toggle" => bit ^= 1 << x,
             // 대응하는 x의 비트가 1일 때, 1을 반환
-            "check" => r.push_str(if (bit & (1 << x)) != 0 { "1\n" } else { "0\n" }),
+            "check" => {
+                writeln!(out, "{}", if (bit & (1 << x)) != 0 { "1" } else { "0" }).unwrap()
+            }
             _ => {}
         }
     }
-
-    println!("{}", &r[..r.len() - 1])
 }
