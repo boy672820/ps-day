@@ -13,22 +13,24 @@ fn main() {
         buf.clear();
         io::stdin().read_line(&mut buf).unwrap();
 
-        let mut a: [usize; 41] = [0; 41];
+        let mut dp: [[usize; 2]; 41] = [[0; 2]; 41];
+        dp[0][0] = 1;
+        dp[1][1] = 1;
 
         let n = buf.trim().parse::<usize>().unwrap();
+        let _r = fibonacci(n, &mut dp);
 
-        let _r = fibonacci(n, &mut a);
-
-        writeln!(out, "{} {}", a[0], a[1]).unwrap();
+        writeln!(out, "{} {}", dp[n][0], dp[n][1]).unwrap();
     }
 }
 
-fn fibonacci(n: usize, a: &mut [usize]) -> usize {
-    if n < 2 {
-        a[n] += 1;
-        return a[n];
-    }
+fn fibonacci(n: usize, dp: &mut [[usize; 2]; 41]) -> [usize; 2] {
+    if n >= 2 && (dp[n][0] == 0 || dp[n][1] == 0) {
+        let left = fibonacci(n - 1, dp);
+        let right = fibonacci(n - 2, dp);
 
-    a[n] = fibonacci(n - 1, a) + fibonacci(n - 2, a);
-    a[n]
+        dp[n][0] = left[0] + right[0];
+        dp[n][1] = left[1] + right[1];
+    }
+    dp[n]
 }
