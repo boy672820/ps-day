@@ -1,34 +1,24 @@
+use std::cmp;
 use std::io;
 
 fn main() {
     let mut buf = String::new();
     io::stdin().read_line(&mut buf).unwrap();
 
-    let mut n = buf.trim().parse::<u32>().unwrap();
-    let mut count = 0;
+    let n = buf.trim().parse::<usize>().unwrap();
+    let mut dp: [usize; 1000001] = [0; 1000001];
 
-    while n != 1 {
-        if n % 3 == 0 {
-            n /= 3;
-            count += 1;
-        } else {
-            if (n - 1) % 3 == 0 {
-                if n % 2 == 0 {
-                    n /= 2;
-                    count += 1;
-                } else {
-                    n = (n - 1) / 3;
-                    count += 2;
-                }
-            } else if n % 2 == 0 {
-                n /= 2;
-                count += 1;
-            } else {
-                n -= 1;
-                count += 1;
-            }
+    for i in 2..(n + 1) {
+        dp[i] = dp[i - 1] + 1;
+
+        if i % 2 == 0 {
+            dp[i] = cmp::min(dp[i], dp[i / 2] + 1);
+        }
+
+        if i % 3 == 0 {
+            dp[i] = cmp::min(dp[i], dp[i / 3] + 1);
         }
     }
 
-    println!("{}", count);
+    println!("{}", dp[n]);
 }
