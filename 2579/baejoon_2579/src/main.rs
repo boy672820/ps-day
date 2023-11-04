@@ -1,30 +1,45 @@
+use std::cmp;
 use std::io;
 
 fn main() {
     let mut buf = String::new();
     io::stdin().read_line(&mut buf).unwrap();
 
-    let n = buf.trim().parse::<u32>().unwrap();
-    let mut v: Vec<u32> = Vec::new();
+    let n = buf.trim().parse::<usize>().unwrap();
+    let mut v: Vec<usize> = Vec::new();
 
     for _ in 0..n {
         buf.clear();
         io::stdin().read_line(&mut buf).unwrap();
 
-        let n = buf.trim().parse::<u32>().unwrap();
+        let n = buf.trim().parse::<usize>().unwrap();
 
         v.push(n);
     }
 
-    let mut t: Vec<u32> = Vec::new();
+    let mut memo: Vec<usize> = Vec::new();
 
-    // 첫 번째와 두 번째는 필수이기 때문에 추가 됨
-    t.push(v[0]);
-    t.push(*v.last().unwrap());
+    // 점화식(Bottom-Up) 초기 값 셋팅
+    memo.push(v[0]);
 
-    // 마지막 요소는 필수이기 때문에, 순회할 때 제외 됨
-    for i in 1..(v.len() - 1) {
+    if n == 1 {
+        println!("{}", memo[0]);
+        return;
     }
 
-    println!("{:?}", t)
+    memo.push(cmp::max(v[0] + v[1], v[1])); // |시작점|o|o| VS |시작점|x|o|
+
+    if n == 2 {
+        println!("{}", memo[1]);
+        return;
+    }
+    
+    memo.push(cmp::max(v[0] + v[2], v[1] + v[2])); // |시작점|o|x|o| VS |시작점|x|o|o|
+
+    for i in 3..n {
+        // 마지막 칸은 무조건 밟고 가야 됨 --> ...|o|x|마지막칸| VS ...|o|x|o|마지막칸|
+        memo.push(cmp::max(memo[i - 2] + v[i], memo[i - 3] + v[i - 1] + v[i]));
+    }
+
+    println!("{}", memo[n - 1])
 }
