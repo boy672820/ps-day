@@ -10,6 +10,7 @@ struct Graph {
 impl Graph {
     fn dfs(&self, start_node: usize, unvisited: &mut Vec<bool>, visited: &mut Vec<usize>) {
         unvisited[start_node] = false;
+
         visited.push(start_node);
 
         for &neighbor in &self.adjacency_list[start_node] {
@@ -68,9 +69,13 @@ fn main() {
         };
 
         adjacency_list[a].push(b);
+        adjacency_list[b].push(a);
     }
 
-    println!("{:?}", adjacency_list);
+    // 정렬을 통해 낮은 숫자부터 조회하게 함
+    for i in 0..adjacency_list.len() {
+        adjacency_list[i].sort();
+    }
 
     let graph = Graph { adjacency_list };
 
@@ -80,7 +85,6 @@ fn main() {
 
     graph.dfs(v, &mut unvisited, &mut dfs_visited);
     graph.bfs(v, &mut bfs_visited);
-
 
     writeln!(
         &io::stdout(),
