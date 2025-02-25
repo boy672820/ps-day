@@ -1,10 +1,14 @@
-const packageJson = {
+const package = {
   name: 'my-package',
   version: '1.0.0',
   dependencies: {
     foo: '^1.0.0',
   },
 };
+
+solution(package, fetchVersions, fetchPackage);
+
+//
 
 async function fetchVersions(packageName) {
   const versions = {
@@ -43,7 +47,7 @@ async function solution(package, fetchVersions, fetchPackage) {
         };
       }
 
-      const { matched, availables } = verions[packageName];
+      const { matched, availables } = versions[packageName];
 
       if (matched.has(rawSemver)) {
         continue;
